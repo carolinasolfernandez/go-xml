@@ -626,7 +626,8 @@ func (cfg *Config) addStandardHelpers() {
 
 	cfg.helperTypes = make(map[xml.Name]spec)
 	timeTypes := map[xsd.Builtin]string{
-		xsd.Date:       "2006-01-02",
+		//xsd.Date:       "2006-01-02",	!!Fix para Andreani -- Eventos mal definidos
+		xsd.Date:       "2006-01-02T15:04:05.999999999",
 		xsd.DateTime:   "2006-01-02T15:04:05.999999999",
 		xsd.GDay:       "---02",
 		xsd.GMonth:     "--01",
