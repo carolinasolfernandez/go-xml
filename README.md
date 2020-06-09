@@ -1,11 +1,11 @@
-[![GoDoc](https://godoc.org/github.com/carolinasolfernandez/xml?status.svg)](https://godoc.org/github.com/carolinasolfernandez/xml) [![Build Status](https://travis-ci.org/droyo/go-xml.svg?branch=master)](https://travis-ci.org/droyo/go-xml)
+[![GoDoc](https://godoc.org/github.com/carolinasolfernandez/go-xml?status.svg)](https://godoc.org/github.com/carolinasolfernandez/go-xml) [![Build Status](https://travis-ci.org/droyo/go-xml.svg?branch=master)](https://travis-ci.org/droyo/go-xml)
 
 ## Installation
 
 Requires go 1.9 or greater for golang.org/x/html dependency.
 
 ```
-go get github.com/carolinasolfernandez/xml/...
+go get github.com/carolinasolfernandez/go-xml/...
 ```
 
 This repository contains a collection of Go packages for working

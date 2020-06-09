@@ -3,8 +3,8 @@ package wsdlgen
 import (
 	"encoding/xml"
 
-	"github.com/carolinasolfernandez/xml/wsdl"
-	"github.com/carolinasolfernandez/xml/xsdgen"
+	"github.com/carolinasolfernandez/go-xml/wsdl"
+	"github.com/carolinasolfernandez/go-xml/xsdgen"
 )
 
 // A Config contains parameters for the various code generation processes.

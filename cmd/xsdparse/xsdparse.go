@@ -1,4 +1,4 @@
-package main // import "github.com/carolinasolfernandez/xml/cmd/xsdparse"
+package main // import "github.com/carolinasolfernandez/go-xml/cmd/xsdparse"
 
 import (
 	"flag"
@@ -7,8 +7,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/carolinasolfernandez/xml/xmltree"
-	"github.com/carolinasolfernandez/xml/xsd"
+	"github.com/carolinasolfernandez/go-xml/xmltree"
+	"github.com/carolinasolfernandez/go-xml/xsd"
 )
 
 var (

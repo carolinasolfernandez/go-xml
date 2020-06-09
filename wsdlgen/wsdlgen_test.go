@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/carolinasolfernandez/xml/xsdgen"
+	"github.com/carolinasolfernandez/go-xml/xsdgen"
 )
 
 type testLogger struct {

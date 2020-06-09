@@ -1,4 +1,4 @@
-package xsdgen // import "github.com/carolinasolfernandez/xml/xsdgen"
+package xsdgen // import "github.com/carolinasolfernandez/go-xml/xsdgen"
 
 import (
 	"bytes"
@@ -11,10 +11,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/carolinasolfernandez/xml/internal/dependency"
-	"github.com/carolinasolfernandez/xml/internal/gen"
-	"github.com/carolinasolfernandez/xml/xmltree"
-	"github.com/carolinasolfernandez/xml/xsd"
+	"github.com/carolinasolfernandez/go-xml/internal/dependency"
+	"github.com/carolinasolfernandez/go-xml/internal/gen"
+	"github.com/carolinasolfernandez/go-xml/xmltree"
+	"github.com/carolinasolfernandez/go-xml/xsd"
 )
 
 type orderedStringMap interface {

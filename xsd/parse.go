@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/carolinasolfernandez/xml/internal/dependency"
-	"github.com/carolinasolfernandez/xml/xmltree"
+	"github.com/carolinasolfernandez/go-xml/internal/dependency"
+	"github.com/carolinasolfernandez/go-xml/xmltree"
 )
 
 func hasCycle(root *xmltree.Element, visited map[*xmltree.Element]struct{}) bool {

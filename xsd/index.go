@@ -3,7 +3,7 @@ package xsd
 import (
 	"encoding/xml"
 
-	"github.com/carolinasolfernandez/xml/xmltree"
+	"github.com/carolinasolfernandez/go-xml/xmltree"
 )
 
 type elementKey struct {

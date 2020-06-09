@@ -1,11 +1,11 @@
-package main // import "github.com/carolinasolfernandez/xml/cmd/wsdlgen"
+package main // import "github.com/carolinasolfernandez/go-xml/cmd/wsdlgen"
 
 import (
 	"log"
 	"os"
 
-	"github.com/carolinasolfernandez/xml/wsdlgen"
-	"github.com/carolinasolfernandez/xml/xsdgen"
+	"github.com/carolinasolfernandez/go-xml/wsdlgen"
+	"github.com/carolinasolfernandez/go-xml/xsdgen"
 )
 
 func main() {

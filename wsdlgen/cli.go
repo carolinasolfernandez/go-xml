@@ -7,9 +7,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/carolinasolfernandez/xml/internal/commandline"
-	"github.com/carolinasolfernandez/xml/internal/gen"
-	"github.com/carolinasolfernandez/xml/xsdgen"
+	"github.com/carolinasolfernandez/go-xml/internal/commandline"
+	"github.com/carolinasolfernandez/go-xml/internal/gen"
+	"github.com/carolinasolfernandez/go-xml/xsdgen"
 )
 
 // The GenSource method converts the AST returned by GenAST to formatted

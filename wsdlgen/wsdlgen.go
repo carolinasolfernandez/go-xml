@@ -7,7 +7,7 @@
 //
 // Code generation for the wsdlgen package can be configured by using
 // the provided Option functions.
-package wsdlgen // import "github.com/carolinasolfernandez/xml/wsdlgen"
+package wsdlgen // import "github.com/carolinasolfernandez/go-xml/wsdlgen"
 
 import (
 	"encoding/xml"
@@ -17,10 +17,10 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/carolinasolfernandez/xml/internal/gen"
-	"github.com/carolinasolfernandez/xml/wsdl"
-	"github.com/carolinasolfernandez/xml/xsd"
-	"github.com/carolinasolfernandez/xml/xsdgen"
+	"github.com/carolinasolfernandez/go-xml/internal/gen"
+	"github.com/carolinasolfernandez/go-xml/wsdl"
+	"github.com/carolinasolfernandez/go-xml/xsd"
+	"github.com/carolinasolfernandez/go-xml/xsdgen"
 )
 
 // Types conforming to the Logger interface can receive information about

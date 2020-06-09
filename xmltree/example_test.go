@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/carolinasolfernandez/xml/xmltree"
+	"github.com/carolinasolfernandez/go-xml/xmltree"
 )
 
 func ExampleElement_Search() {

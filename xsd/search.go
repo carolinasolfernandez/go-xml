@@ -1,6 +1,6 @@
 package xsd
 
-import "github.com/carolinasolfernandez/xml/xmltree"
+import "github.com/carolinasolfernandez/go-xml/xmltree"
 
 // Search predicates for the xmltree.Element.Search method
 type predicate func(el *xmltree.Element) bool

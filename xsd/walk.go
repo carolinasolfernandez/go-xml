@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/carolinasolfernandez/xml/xmltree"
+	"github.com/carolinasolfernandez/go-xml/xmltree"
 )
 
 // When working with an xml tree structure, we naturally have some
