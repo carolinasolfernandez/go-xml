@@ -17,8 +17,6 @@ import (
 	"github.com/carolinasolfernandez/go-xml/xsd"
 )
 
-var Scopes xmltree.Scope
-
 type orderedStringMap interface {
 	keys() []string
 }
@@ -545,12 +543,6 @@ func addNamespace(t *xsd.ComplexType) {
 		}
 	}
 	t.Elements[0].Scope = scope
-}
-
-func setScope(t xsd.ComplexType) {
-	for _, el := range t.Elements {
-		Scopes = *Scopes.JoinScope(&el.Scope)
-	}
 }
 
 func (cfg *Config) genTypeSpec(t xsd.Type) (result []spec, err error) {
