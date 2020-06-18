@@ -174,6 +174,7 @@ func (cfg *Config) gen(primaries, deps []xsd.Schema) (*Code, error) {
 
 	for _, primary := range primaries {
 		cfg.debugf("flattening type hierarchy for schema %q", primary.TargetNS)
+
 		types := cfg.flatten(primary.Types)
 		types = cfg.expandComplexTypes(types)
 		for _, t := range types {
@@ -527,11 +528,21 @@ func addNamespace(t *xsd.ComplexType) {
 	if t.Elements[0].Name.Local != "XMLNs" {
 		namespace := make([]xsd.Element, 1)
 		namespace[0].Name.Local = "XMLNs"
-		namespace[0].Name.Space = t.Elements[0].Name.Space
+		namespace[0].Name.Space = t.Name.Space
 		namespace[0].Type = xsd.String
-		namespace[0].Scope = t.Elements[0].Scope
 		t.Elements = append(namespace, t.Elements...)
 	}
+
+	if t.Elements[0].Name.Space != "" {
+		t.Elements[0].Name.Space = t.Name.Space
+	}
+	scope := t.Elements[1].Scope
+	if xsd.XMLName(t).Space != t.Elements[1].Name.Space {
+		for _, el := range t.Elements {
+			scope = *scope.JoinScope(&el.Scope)
+		}
+	}
+	t.Elements[0].Scope = scope
 }
 
 func (cfg *Config) genTypeSpec(t xsd.Type) (result []spec, err error) {
@@ -694,6 +705,7 @@ func (cfg *Config) genComplexType(t *xsd.ComplexType) ([]spec, error) {
 	cfg.debugf("complexType %s: generating struct fields for %d elements and %d attributes",
 		xsd.XMLName(t).Local, len(elements), len(attributes))
 
+	prefixScope := strings.Split(elements[0].Scope.Prefix(elements[0].Name), ":")[0]
 	for _, el := range elements {
 		options := ""
 		if el.Nillable || el.Optional {
@@ -703,13 +715,21 @@ func (cfg *Config) genComplexType(t *xsd.ComplexType) ([]spec, error) {
 		tag := fmt.Sprintf(`xml:"%s %s%s"`, el.Name.Space, el.Name.Local, options)
 
 		if cfg.addNamespace {
-			prefixLocal := strings.Split(el.Scope.Prefix(el.Name), ":")
-			tag = fmt.Sprintf(`xml:"%s:%s%s"`, prefixLocal[0], el.Name.Local, options)
+			prefixLocal := strings.Split(el.Scope.Prefix(el.Name), ":")[0]
+			switch el.Type.(type) {
+			case *xsd.ComplexType:
+				tag = fmt.Sprintf(`xml:"%s:%s%s"`, prefixLocal, el.Name.Local, options)
+			default:
+				if prefixScope == prefixLocal {
+					tag = fmt.Sprintf(`xml:"%s:%s%s"`, prefixLocal, el.Name.Local, options)
+				}
+			}
+
 		}
 
 		if el.Name.Local == "XMLNs" {
-			prefixLocal := strings.Split(el.Scope.Prefix(el.Name), ":")
-			tag = fmt.Sprintf(`xml:"xmlns:%s,attr,omitempty"`, prefixLocal[0])
+			prefixLocal := strings.Split(el.Scope.Prefix(el.Name), ":")[0]
+			tag = fmt.Sprintf(`xml:"xmlns:%s,attr,omitempty"`, prefixLocal)
 		}
 
 		base, err := cfg.expr(el.Type)
@@ -834,12 +854,16 @@ func (cfg *Config) genComplexTypeMethods(t *xsd.ComplexType, overrides []fieldOv
 	if cfg.addNamespace {
 		nameSpace := t.Elements[0].Name.Space
 		for _, el := range t.Elements {
-			if el.Name.Space != nameSpace {
-				var namespace xml.Name
-				namespace.Space = el.Name.Space
-				namespace.Local = strings.Title(el.Name.Local)
-				data.NameSpaces = append(data.NameSpaces, namespace)
+			switch el.Type.(type) {
+			case *xsd.ComplexType:
+				if el.Name.Space != nameSpace {
+					var namespace xml.Name
+					namespace.Space = el.Name.Space
+					namespace.Local = strings.Title(el.Name.Local)
+					data.NameSpaces = append(data.NameSpaces, namespace)
+				}
 			}
+
 		}
 	}
 
@@ -851,17 +875,8 @@ func (cfg *Config) genComplexTypeMethods(t *xsd.ComplexType, overrides []fieldOv
 			type T {{.Type}}
 			var overlay struct{
 				*T
-				{{range .Overrides}}
-				{{.FieldName}} *{{.ToType}} `+"`{{.Tag}}`"+`
-				{{end}}
 			}
 			overlay.T = (*T)(t)
-			{{range .Overrides}}
-			overlay.{{.FieldName}} = (*{{.ToType}})(&overlay.T.{{.FieldName}})
-			{{if .DefaultValue -}}
-			// overlay.{{.FieldName}} = {{.DefaultValue}}
-			{{end -}}
-			{{end}}
 
 			return d.DecodeElement(&overlay, &start)
 		`, data).Decl()
@@ -888,15 +903,9 @@ func (cfg *Config) genComplexTypeMethods(t *xsd.ComplexType, overrides []fieldOv
 			type T {{.Type}}
 			var layout struct{
 				*T
-				{{- range .Overrides}}
-				{{.FieldName}} *{{.ToType}}`+"`{{.Tag}}`"+`
-				{{end -}}
 			}
 			layout.T = (*T)(t)
 			
-			{{- range .Overrides}}
-			layout.{{.FieldName}} = (*{{.ToType}})(&layout.T.{{.FieldName}})
-			{{end -}}
 
 			{{- range .NameSpaces}}
 			layout.{{.Local}}.XMLNs = "{{.Space}}"
