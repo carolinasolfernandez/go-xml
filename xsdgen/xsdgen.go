@@ -867,23 +867,6 @@ func (cfg *Config) genComplexTypeMethods(t *xsd.ComplexType, overrides []fieldOv
 		}
 	}
 
-	unmarshal, err = gen.Func("UnmarshalXML").
-		Receiver("t *"+data.Type).
-		Args("d *xml.Decoder", "start xml.StartElement").
-		Returns("error").
-		BodyTmpl(`
-			type T {{.Type}}
-			var overlay struct{
-				*T
-			}
-			overlay.T = (*T)(t)
-
-			return d.DecodeElement(&overlay, &start)
-		`, data).Decl()
-	if err != nil {
-		return nil, nil, err
-	}
-
 	// We don't set defaults in MarshalXML; there's no way to distinguish
 	// an intentional zero value from "no value", and the consumer of the
 	// XML should know what the default is from the XSD.
@@ -894,12 +877,13 @@ func (cfg *Config) genComplexTypeMethods(t *xsd.ComplexType, overrides []fieldOv
 		}
 	}
 
-	data.Overrides = nonDefaultOverrides
-	marshal, err = gen.Func("MarshalXML").
-		Receiver("t *"+data.Type).
-		Args("e *xml.Encoder", "start xml.StartElement").
-		Returns("error").
-		BodyTmpl(`
+	if len(data.NameSpaces) > 0 {
+		data.Overrides = nonDefaultOverrides
+		marshal, err = gen.Func("MarshalXML").
+			Receiver("t *"+data.Type).
+			Args("e *xml.Encoder", "start xml.StartElement").
+			Returns("error").
+			BodyTmpl(`
 			type T {{.Type}}
 			var layout struct{
 				*T
@@ -913,6 +897,7 @@ func (cfg *Config) genComplexTypeMethods(t *xsd.ComplexType, overrides []fieldOv
 			//
 			return e.EncodeElement(layout, start)
 		`, data).Decl()
+	}
 	return marshal, unmarshal, err
 }
 
